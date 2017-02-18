@@ -1,3 +1,5 @@
+import os
+
 from simplejson import OrderedDict
 
 from gpm.instances.instance import FileInstance
@@ -30,6 +32,8 @@ class ResultFolder:
         self._state_db.set(output_file_name, stored_state_content_pairs)
 
     def get_results(self, result_file_name):
+        result_file_name = os.path.abspath(result_file_name)
+
         stored_state_content_pairs = self._state_db.get(result_file_name)
 
         for state_hash, output_file_hash in stored_state_content_pairs.items():

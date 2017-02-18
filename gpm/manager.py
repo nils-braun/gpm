@@ -1,3 +1,4 @@
+import os
 from contextlib import contextmanager
 
 from gpm.config import ConfigObject
@@ -19,7 +20,7 @@ class Calculation:
         return self._output_files
 
     def add_output_file(self, output_file):
-        self._output_files.append(output_file)
+        self._output_files.append(os.path.abspath(output_file))
 
 
 class GPM(ConfigObject):

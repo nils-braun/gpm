@@ -1,10 +1,12 @@
+import os
+
 from git import exc
 from git import Repo
 
 
 class GitRepo:
     def __init__(self, path, allowed_to_create=False):
-        self.path = path
+        self.path = os.path.abspath(path)
 
         try:
             self.repo = Repo(path)
