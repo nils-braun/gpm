@@ -2,9 +2,8 @@ from gpm.instances.instance import FileInstance
 
 
 class ResultFolder:
-    def __init__(self, state_db, results_db):
+    def __init__(self, state_db):
         self._state_db = state_db
-        self._results_db = results_db
 
     def store_results(self, output_file_name, state_hash):
         output_file_state = FileInstance(output_file_name).snapshot(self._state_db)

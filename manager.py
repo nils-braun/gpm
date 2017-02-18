@@ -3,7 +3,6 @@ from contextlib import contextmanager
 from gpm.config import ConfigObject
 from results.result import ResultFolder
 from gpm.db.state_database import KeyValueDatabase
-from gpm.states.state import State
 from gpm.utils.utils import get_state_file, get_results_file
 
 
@@ -30,9 +29,8 @@ class GPM(ConfigObject):
         self._externals = externals
 
         self._state_database = KeyValueDatabase(get_state_file(self.base_dir))
-        self._results_database = KeyValueDatabase(get_results_file(self.base_dir))
 
-        self.results_dir = ResultFolder(self._state_database, self._results_database)
+        self.results_dir = ResultFolder(self._state_database)
 
     @contextmanager
     def calculation(self):
