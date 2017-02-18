@@ -33,7 +33,7 @@ class GPM(ConfigObject):
         self.results_dir = ResultFolder(self._state_database)
 
     @contextmanager
-    def calculation(self):
+    def get_calculation(self):
         calculation = self._start_calculation()
         yield calculation
         # TODO: Do something special when it failed!

@@ -62,7 +62,7 @@ class ListState(State):
     def complete_loading(self, db):
         self.list_of_states = [State.load(db, key) for key in self.keys]
 
-    def __str__(self):
+    def __repr__(self):
         return "[" + "\n".join([str(state) for state in self.list_of_states]) + "]"
 
 
@@ -77,12 +77,12 @@ class GitState(GitRepo, State):
     def apply(self, instance, db):
         raise NotImplementedError
 
-    def __str__(self):
+    def __repr__(self):
         if self.diff:
             diff = "dirty"
         else:
             diff = ""
-        return "{self.path}: {self.commit_hash}+{diff}".format(self=self, diff=diff)
+        return "GitState ({self.path}): {self.commit_hash}+{diff}".format(self=self, diff=diff)
 
 
 class FileState(State):
