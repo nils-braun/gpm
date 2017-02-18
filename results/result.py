@@ -1,4 +1,5 @@
 from gpm.instances.instance import FileInstance
+from gpm.states.state import State
 
 
 class ResultFolder:
@@ -27,7 +28,23 @@ class ResultFolder:
 
 
 class Commit:
-    def __init__(self, file_name, file_content_hash, state_hash):
+    def __init__(self, file_name, file_content_hash, state_hash, state_db):
         self.file_name = file_name
-        self.file_content_hash = file_content_hash
-        self.state_hash = state_hash
+        self._file_content_hash = file_content_hash
+        self._state_hash = state_hash
+
+        self._state_db = state_db
+
+    @property
+    def file_content(self):
+        from gpm.states.state import FileState
+
+        file_state = State.load(self._state_db, self._file_content_hash)
+
+        assert isinstance(file_state, FileState)
+
+        return file_state.file_content
+
+    @property
+    def state(self):
+        return State.load(self._state_db, self._state_hash)
