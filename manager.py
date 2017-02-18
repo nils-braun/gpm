@@ -1,10 +1,10 @@
 from contextlib import contextmanager
 
 from gpm.config import ConfigObject
-from gpm.state import ResultFolder
+from results.result import ResultFolder
 from gpm.db.state_database import KeyValueDatabase
 from gpm.states.state import State
-from gpm.utils.utils import get_state_file
+from gpm.utils.utils import get_state_file, get_results_file
 
 
 class Calculation:
@@ -24,13 +24,15 @@ class Calculation:
 
 
 class GPM(ConfigObject):
-    def __init__(self, base_dir, results_dir, externals):
+    def __init__(self, base_dir, externals):
         ConfigObject.__init__(self, base_dir)
 
-        self.results_dir = ResultFolder(results_dir)
         self._externals = externals
 
         self._state_database = KeyValueDatabase(get_state_file(self.base_dir))
+        self._results_database = KeyValueDatabase(get_results_file(self.base_dir))
+
+        self.results_dir = ResultFolder(self._state_database, self._results_database)
 
     @contextmanager
     def calculation(self):
@@ -51,27 +53,11 @@ class GPM(ConfigObject):
 
     def _end_calculation(self, calculation):
         # Commit the new files with a reference to the state hash
-        self.results_dir.commit(files=calculation.output_files,
-                                commit_message="Finished calculation with "
-                                               "{state_hash}".format(state_hash=calculation.state_hash))
+        for output_file_name in calculation.output_files:
+            self.results_dir.store_results(output_file_name, calculation.state_hash)
 
-    def get_states_for_file(self, result_file):
-        commits = self.results_dir.get_commits(result_file)
-
-        for commit in commits:
-            commit_message = commit.message
-            if commit_message.startswith("Finished calculation with "):
-                yield State.load(self._state_database, commit_message[26:])
+    def get_results_for_file(self, result_file):
+        return self.results_dir.get_results(result_file)
 
     def apply(self, state):
         state.apply(self._externals)
-
-    def get_content_for_file(self, result_file):
-        result_file = self.results_dir.normalize_file_name(result_file)
-        commits = self.results_dir.get_commits(result_file)
-
-        for commit in commits:
-            commit_message = commit.message
-            if commit_message.startswith("Finished calculation with "):
-                yield State.load(self._state_database, commit_message[26:]), \
-                      self.results_dir.repo.git.execute(["git", "show", commit.hexsha + ":" + result_file])
