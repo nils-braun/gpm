@@ -1,6 +1,3 @@
-import cPickle
-from hashlib import md5
-
 from gpm.utils.git_utils import GitRepo
 
 
@@ -14,21 +11,14 @@ class State:
     def complete_loading(self, db):
         pass
 
-    def get_key_and_string(self):
-        string_to_store = cPickle.dumps(self)
-        key_to_store = md5(string_to_store).hexdigest()
-        return key_to_store, string_to_store
-
     def store(self, db):
-        key_to_store, string_to_store = self.get_key_and_string()
-        db.set(key_to_store, string_to_store)
+        key_to_store = db.set(self)
 
         return key_to_store
 
     @staticmethod
     def load(db, key):
-        stored_string = db.get(key)
-        stored_state = cPickle.loads(stored_string)
+        stored_state = db.get(key)
 
         assert isinstance(stored_state, State)
 
@@ -63,6 +53,8 @@ class ListState(State):
     def apply(self, instance, db):
         from gpm.instances.instance import ListInstance
         assert isinstance(instance, ListInstance)
+
+        assert len(self.list_of_states) == len(instance.list_of_instances)
 
         for state, instance in zip(self.list_of_states, instance.list_of_instances):
             state.apply(instance)

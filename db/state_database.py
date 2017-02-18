@@ -1,5 +1,7 @@
 import os
 
+import cPickle
+from hashlib import md5
 import simplejson
 
 
@@ -19,12 +21,28 @@ class KeyValueDatabase:
         with open(self.database_file, 'wb') as f:
             simplejson.dump(self._database, f)
 
-    def set(self, key, value):
-        self._database[key] = value
+    def set(self, key_or_value, value_or_none=None):
+        if value_or_none is None:
+            value = key_or_value
+            key = None
+        else:
+            value = value_or_none
+            key = key_or_value
+
+        string_to_store = cPickle.dumps(value)
+
+        if key is None:
+            key = md5(string_to_store).hexdigest()
+
+        self._database[key] = string_to_store
         self._store_db()
+
+        return key
 
     def get(self, key):
         self._load_db()
 
-        value = self._database[key]
+        value_as_string = self._database[key]
+        value = cPickle.loads(value_as_string)
+
         return value
