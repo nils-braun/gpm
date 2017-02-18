@@ -1,3 +1,5 @@
+from simplejson import OrderedDict
+
 from gpm.instances.instance import FileInstance
 from gpm.states.state import State
 
@@ -13,18 +15,25 @@ class ResultFolder:
         try:
             stored_state_content_pairs = self._state_db.get(output_file_name)
         except KeyError:
-            stored_state_content_pairs = []
+            stored_state_content_pairs = OrderedDict()
 
-        stored_state_content_pairs.append((state_hash, output_file_hash))
+        if state_hash in stored_state_content_pairs:
+            if stored_state_content_pairs[state_hash] != output_file_hash:
+                raise RuntimeError("It seems that you have produced different output file contents "
+                                   "based on the same status!")
+            else:
+                return
+
+        # We only need to store something, if it was not already there
+        stored_state_content_pairs[state_hash] = output_file_hash
 
         self._state_db.set(output_file_name, stored_state_content_pairs)
 
     def get_results(self, result_file_name):
         stored_state_content_pairs = self._state_db.get(result_file_name)
 
-        for stored_state_content in stored_state_content_pairs:
-            state_hash, output_file_hash = stored_state_content
-            yield Commit(result_file_name, output_file_hash, state_hash)
+        for state_hash, output_file_hash in stored_state_content_pairs.items():
+            yield Commit(result_file_name, output_file_hash, state_hash, self._state_db)
 
 
 class Commit:
