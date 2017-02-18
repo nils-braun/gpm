@@ -62,6 +62,9 @@ class ListState(State):
     def complete_loading(self, db):
         self.list_of_states = [State.load(db, key) for key in self.keys]
 
+    def __str__(self):
+        return "[" + "\n".join([str(state) for state in self.list_of_states]) + "]"
+
 
 class GitState(GitRepo, State):
     def __init__(self, path, diff, commit_hash=None):
