@@ -34,3 +34,18 @@ class GitInstance(GitRepo, Instance):
         else:
             diff = self.repo.git.execute(["git", "diff"])
             return GitState(path=self.path, diff=diff, commit_hash=None)
+
+
+class FileInstance(Instance):
+    def snapshot(self, db):
+        from gpm.states.state import FileState
+
+        with open(self.file_path, "r") as f:
+            file_content = f.read()
+
+        return FileState(file_path=self.file_path, file_content=file_content)
+
+    def __init__(self, file_path):
+        Instance.__init__(self)
+
+        self.file_path = file_path

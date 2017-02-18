@@ -80,3 +80,15 @@ class GitState(GitRepo, State):
         else:
             diff = ""
         return "{self.path}: {self.commit_hash}+{diff}".format(self=self, diff=diff)
+
+
+class FileState(State):
+    def apply(self, instance, db):
+        raise NotImplementedError
+
+    def __init__(self, file_path, file_content):
+        State.__init__(self)
+
+        self.file_path = file_path
+        self.file_content = file_content
+
