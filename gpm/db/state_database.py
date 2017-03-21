@@ -18,11 +18,11 @@ class KeyValueDatabase:
 
     def _load_db(self):
         with open(self.database_file, 'rb') as f:
-            self._database = simplejson.load(f)
+            self._database = pickle.load(f)
 
     def _store_db(self):
         with open(self.database_file, 'wb') as f:
-            simplejson.dump(self._database, f)
+            pickle.dump(self._database, f)
 
     def set(self, key_or_value, value_or_none=None):
         if value_or_none is None:
