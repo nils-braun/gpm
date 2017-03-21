@@ -1,6 +1,9 @@
 import os
 
-import cPickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 from hashlib import md5
 import simplejson
 
@@ -29,7 +32,7 @@ class KeyValueDatabase:
             value = value_or_none
             key = key_or_value
 
-        string_to_store = cPickle.dumps(value)
+        string_to_store = pickle.dumps(value)
 
         if key is None:
             key = md5(string_to_store).hexdigest()
@@ -43,6 +46,6 @@ class KeyValueDatabase:
         self._load_db()
 
         value_as_string = self._database[key]
-        value = cPickle.loads(value_as_string)
+        value = pickle.loads(value_as_string)
 
         return value
