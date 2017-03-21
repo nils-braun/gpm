@@ -2,7 +2,7 @@ import os
 from contextlib import contextmanager
 
 from gpm.config import ConfigObject
-from results.result import ResultFolder
+from gpm.results.result import ResultFolder
 from gpm.db.state_database import KeyValueDatabase
 from gpm.utils.utils import get_state_file, get_results_file
 
