@@ -1,5 +1,6 @@
 from gpm.utils.git_utils import GitRepo
 
+from tempfile import NamedTemporaryFile
 
 class State:
     def __init__(self):
@@ -57,7 +58,7 @@ class ListState(State):
         assert len(self.list_of_states) == len(instance.list_of_instances)
 
         for state, instance in zip(self.list_of_states, instance.list_of_instances):
-            state.apply(instance)
+            state.apply(instance, db)
 
     def complete_loading(self, db):
         self.list_of_states = [State.load(db, key) for key in self.keys]
@@ -75,14 +76,28 @@ class GitState(GitRepo, State):
         self.commit_hash = commit_hash
 
     def apply(self, instance, db):
-        raise NotImplementedError
+        print("""
+Will now edit the repository {path}. To revert it back to its original state, please call:
+    git reset --hard
+    git checkout {original_hash}
+    git stash pop
+        """.format(original_hash=self.repo.head.commit.hexsha, path=self.path))
+
+        self.repo.git.stash()
+        self.repo.git.checkout(self.commit_hash)
+
+        if self.diff.strip():
+            with NamedTemporaryFile() as f:
+                f.write(self.diff)
+                print(self.diff)
+                self.repo.git.apply(f.name)
 
     def __repr__(self):
         if self.diff:
-            diff = "dirty"
+            diff = "+dirty"
         else:
             diff = ""
-        return "GitState ({self.path}): {self.commit_hash}+{diff}".format(self=self, diff=diff)
+        return "GitState ({self.path}): {self.commit_hash}{diff}".format(self=self, diff=diff)
 
 
 class FileState(State):

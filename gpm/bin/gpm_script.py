@@ -59,7 +59,6 @@ def log(project, result_file, show_file_content, show_externals):
     print("")
 
     for commit in commits:
-        print("----")
         format_commit(commit,
                       show_file_content=show_file_content,
                       show_externals=show_externals)

@@ -59,4 +59,4 @@ class GPM(ConfigObject):
         return self.results_dir.get_results(result_file)
 
     def apply(self, state):
-        state.apply(self._externals)
+        state.apply(self._externals, self._state_database)
