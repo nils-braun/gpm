@@ -40,7 +40,7 @@ class FileInstance(Instance):
     def snapshot(self, db):
         from gpm.states.state import FileState
 
-        with open(self.file_path, "r") as f:
+        with open(self.file_path, "rb") as f:
             file_content = f.read()
 
         return FileState(file_path=self.file_path, file_content=file_content)
