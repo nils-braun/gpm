@@ -1,4 +1,6 @@
 from gpm.utils.git_utils import GitRepo
+import os
+import stat
 
 
 class Instance:
@@ -44,6 +46,20 @@ class FileInstance(Instance):
             file_content = f.read()
 
         return FileState(file_path=self.file_path, file_content=file_content)
+
+    def __init__(self, file_path):
+        Instance.__init__(self)
+
+        self.file_path = file_path
+
+
+class FileMetaDataInstance(Instance):
+    def snapshot(self, db):
+        from gpm.states.state import FileMetaDataState
+
+        st = os.stat(self.file_path)
+
+        return FileMetaDataState(file_path=self.file_path, modified_time=st[stat.ST_MTIME])
 
     def __init__(self, file_path):
         Instance.__init__(self)

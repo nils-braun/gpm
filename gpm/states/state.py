@@ -110,3 +110,14 @@ class FileState(State):
         self.file_path = file_path
         self.file_content = file_content
 
+
+class FileMetaDataState(State):
+    def apply(self, instance, db):
+        raise NotImplementedError
+
+    def __init__(self, file_path, modified_time):
+        State.__init__(self)
+
+        self.file_path = file_path
+        self.modified_time = modified_time
+
