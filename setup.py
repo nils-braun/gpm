@@ -13,10 +13,6 @@ def setup_package():
           packages=find_packages(),
           setup_requires=['setuptools>=17.1'] + pytest_runner,
           tests_require=['pytest', 'pytest-cov', 'coverage'],
-          entry_points="""
-            [console_scripts]
-            gpm = gpm.bin.gpm_script:cli
-            """
     )
 
 if __name__ == "__main__":
