@@ -2,7 +2,7 @@ from gpm.db.key_value_db import KeyValueDB
 from gpm.snapshots.snapshot_list import SnapshotList
 
 try:
-    import cPickle as cpickle
+    import cPickle as pickle
 except ImportError:
     import pickle
 

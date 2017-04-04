@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 from gpm.snapshots.snapshot_list import SnapshotList
 from gpm.db.database import Database
 from gpm.snapshots.creator import create_snapshot
@@ -13,6 +15,7 @@ class State:
         snapshot = create_snapshot(snapshot_stub)
         self.snapshots.append(snapshot)
 
+    @contextmanager
     def get_calculation(self):
         calculation = Calculation(self.snapshots, self.db)
 

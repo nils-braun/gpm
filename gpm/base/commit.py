@@ -1,10 +1,10 @@
 def store_commit(commit, db):
-    output_file_id = db.store(commit.output_file_snapshot)
-    dependency_id = db.store(commit.dependency_snapshots)
+    output_file_id = db.store(commit._output_file_snapshot)
+    dependency_id = db.store(commit._dependency_snapshots)
 
     full_store_id = db.store((output_file_id, dependency_id))
 
-    db.add(commit.file_name, full_store_id)
+    db.add(commit.file_path, full_store_id)
 
 
 def load_commit(commit_hash, db):
@@ -23,8 +23,8 @@ class Commit:
         self.commit_hash = commit_hash
 
     @property
-    def file_name(self):
-        return self._output_file_snapshot.file_name
+    def file_path(self):
+        return self._output_file_snapshot.file_path
 
     @property
     def file_content(self):

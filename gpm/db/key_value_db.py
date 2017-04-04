@@ -7,6 +7,8 @@ import os
 
 
 def get_db_file_path(folder):
+    if not folder:
+        folder = os.getcwd()
     return os.path.join(folder, ".gpm/state.db")
 
 
@@ -16,8 +18,11 @@ class KeyValueDB:
         self._dict = {}
 
     def _load(self):
-        with open(self.db_file_path, "rb") as f:
-            self._dict = pickle.load(f)
+        if not os.path.exists(self.db_file_path):
+            self._dict = {}
+        else:
+            with open(self.db_file_path, "rb") as f:
+                self._dict = pickle.load(f)
 
     def _save(self):
         if not os.path.exists(self.db_file_path):

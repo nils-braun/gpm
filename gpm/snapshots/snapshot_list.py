@@ -8,3 +8,6 @@ class SnapshotList(BaseSnapshot):
 
     def append(self, snapshot):
         self._list.append(snapshot)
+
+    def __iter__(self):
+        return iter(self._list)
