@@ -11,7 +11,11 @@ class SnapshotList(BaseSnapshot):
             self._list = {}
 
     def append(self, snapshot):
-        self._list[str(snapshot)] = snapshot
+        self._list[snapshot.name] = snapshot
 
     def __iter__(self):
         return iter(self._list.values())
+
+    @property
+    def name_params(self):
+        return len(self._list)
