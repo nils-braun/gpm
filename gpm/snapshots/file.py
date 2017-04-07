@@ -18,3 +18,7 @@ class FileSnapshot(BaseSnapshot):
             self.file_content = None
 
         self.last_modified = datetime.fromtimestamp(os.stat(self.file_path)[stat.ST_MTIME])
+
+    def __repr__(self):
+        return "{class_name} {content}".format(class_name=self.__class__.__name__,
+                                               content=self.file_path)
