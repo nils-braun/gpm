@@ -7,6 +7,8 @@ install:
 - pip install --upgrade setuptools
 - pip install -r requirements.txt
 - pip install .
+scripts:
+- py.test tests
 env:
 - NUMBER_OF_CPUS=1
 after_success:
