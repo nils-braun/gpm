@@ -1,19 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+    Setup file for gpm.
+
+    This file was generated with PyScaffold 2.5.6, a tool that easily
+    puts up a scaffold for your new Python project. Learn more under:
+    http://pyscaffold.readthedocs.org/
+"""
 
 import sys
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 def setup_package():
-    needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
-    pytest_runner = ['pytest-runner'] if needs_pytest else []
-    setup(name="gpm",
-          version="0.1",
-          packages=find_packages(),
-          setup_requires=['setuptools>=17.1'] + pytest_runner,
-          tests_require=['pytest', 'pytest-cov', 'coverage'],
-    )
+    setup(setup_requires=['pyscaffold>=2.5a0,<2.6a0'],
+          use_pyscaffold=True)
+
 
 if __name__ == "__main__":
     setup_package()
