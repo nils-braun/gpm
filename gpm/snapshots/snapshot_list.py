@@ -6,7 +6,7 @@ class SnapshotList(BaseSnapshot):
         BaseSnapshot.__init__(self)
 
         if l:
-            self._list = {str(item): item for item in l}
+            self._list = {item.name: item for item in l}
         else:
             self._list = {}
 
