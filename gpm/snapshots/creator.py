@@ -1,5 +1,5 @@
 from gpm.snapshots.base import BaseSnapshot
-from gpm.snapshots.file import FileSnapshot
+from gpm.snapshots.file_snapshot import FileSnapshot
 
 import os
 

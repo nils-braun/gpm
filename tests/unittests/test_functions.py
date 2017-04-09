@@ -1,7 +1,7 @@
 from gpm.fixtures import IntegrationTestFixture
 
 from gpm.snapshots.creator import create_snapshot
-from gpm.snapshots.file import FileSnapshot
+from gpm.snapshots.file_snapshot import FileSnapshot
 
 
 class FunctionsTestCase(IntegrationTestFixture):
