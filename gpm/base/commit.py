@@ -1,3 +1,7 @@
+from contextlib import contextmanager
+from tempfile import NamedTemporaryFile, mkstemp
+
+
 def store_commit(commit, db):
     output_file_id = db.store(commit._output_file_snapshot)
     dependency_id = db.store(commit._dependency_snapshots)
@@ -33,6 +37,16 @@ class Commit:
     @property
     def states(self):
         return self._dependency_snapshots
+
+    @contextmanager
+    def checkout(self):
+        _, file_path = mkstemp()
+
+        with open(file_path, "wb") as f:
+            f.write(self.file_content)
+
+        with open(file_path, "rb") as f:
+            yield f
 
     def __eq__(self, other):
         return (other.commit_hash == self.commit_hash and
