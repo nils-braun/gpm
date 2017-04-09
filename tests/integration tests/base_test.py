@@ -1,6 +1,6 @@
 import os
 
-from gpm import State, get_results_for_file
+from gpm import State, get_results_for_file, get_commit
 from gpm.fixtures import IntegrationTestFixture
 
 
@@ -30,6 +30,7 @@ class BaseIntegrationTestCase(IntegrationTestFixture):
         for snapshot in commit.states:
             self.assertTrue(snapshot.file_path, os.path.join(self.temp_file_folder, self.file_name))
             self.assertTrue(snapshot.file_content, b"Some important stuff")
+        self.assertEqual(get_commit(commit.commit_hash), commit)
 
         commit = results[1]
         self.assertEqual(commit.file_path, os.path.join(self.temp_file_folder, self.result_file_name))
@@ -38,6 +39,7 @@ class BaseIntegrationTestCase(IntegrationTestFixture):
         for snapshot in commit.states:
             self.assertTrue(snapshot.file_path, os.path.join(self.temp_file_folder, self.file_name))
             self.assertTrue(snapshot.file_content, b"Some important stuff")
+        self.assertEqual(get_commit(commit.commit_hash), commit)
 
         commit = results[2]
         self.assertEqual(commit.file_path, os.path.join(self.temp_file_folder, self.result_file_name))
@@ -46,3 +48,4 @@ class BaseIntegrationTestCase(IntegrationTestFixture):
         for snapshot in commit.states:
             self.assertTrue(snapshot.file_path, os.path.join(self.temp_file_folder, self.file_name))
             self.assertTrue(snapshot.file_content, b"Another stuff")
+        self.assertEqual(get_commit(commit.commit_hash), commit)
