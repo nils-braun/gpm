@@ -34,6 +34,9 @@ class IntegrationTestFixture(TestCase):
 
         check_call(["git", "init"], cwd=self.git_repo)
 
+        check_call(["git", "config", "user.email", "you@example.com"], cwd=self.git_repo)
+        check_call(["git", "config", "user.name", "Your Name"], cwd=self.git_repo)
+
         with open(os.path.join(self.git_repo, "git_file"), "w") as f:
             f.write(content)
 
