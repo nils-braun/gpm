@@ -25,24 +25,24 @@ class BaseIntegrationTestCase(IntegrationTestFixture):
 
         commit = results[0]
         self.assertEqual(commit.file_path, os.path.join(self.temp_file_folder, self.result_file_name))
-        self.assertEqual(commit.file_content, "content 1")
+        self.assertEqual(commit.file_content, b"content 1")
         self.assertTrue(commit.commit_hash)
         for snapshot in commit.states:
             self.assertTrue(snapshot.file_path, os.path.join(self.temp_file_folder, self.file_name))
-            self.assertTrue(snapshot.file_content, "Some important stuff")
+            self.assertTrue(snapshot.file_content, b"Some important stuff")
 
         commit = results[1]
         self.assertEqual(commit.file_path, os.path.join(self.temp_file_folder, self.result_file_name))
-        self.assertEqual(commit.file_content, "content 2")
+        self.assertEqual(commit.file_content, b"content 2")
         self.assertTrue(commit.commit_hash)
         for snapshot in commit.states:
             self.assertTrue(snapshot.file_path, os.path.join(self.temp_file_folder, self.file_name))
-            self.assertTrue(snapshot.file_content, "Some important stuff")
+            self.assertTrue(snapshot.file_content, b"Some important stuff")
 
         commit = results[2]
         self.assertEqual(commit.file_path, os.path.join(self.temp_file_folder, self.result_file_name))
-        self.assertEqual(commit.file_content, "content 3")
+        self.assertEqual(commit.file_content, b"content 3")
         self.assertTrue(commit.commit_hash)
         for snapshot in commit.states:
             self.assertTrue(snapshot.file_path, os.path.join(self.temp_file_folder, self.file_name))
-            self.assertTrue(snapshot.file_content, "Another stuff")
+            self.assertTrue(snapshot.file_content, b"Another stuff")
