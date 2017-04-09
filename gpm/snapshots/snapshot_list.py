@@ -19,3 +19,6 @@ class SnapshotList(BaseSnapshot):
     @property
     def name_params(self):
         return len(self._list)
+
+    def __eq__(self, other):
+        return other._list == self._list

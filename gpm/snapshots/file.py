@@ -22,3 +22,8 @@ class FileSnapshot(BaseSnapshot):
     @property
     def name_param(self):
         return self.file_path
+
+    def __eq__(self, other):
+        return (other.file_path == self.file_path and
+                other.file_content == self.file_content and
+                other.last_modified == self.last_modified)

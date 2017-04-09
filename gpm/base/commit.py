@@ -33,3 +33,8 @@ class Commit:
     @property
     def states(self):
         return self._dependency_snapshots
+
+    def __eq__(self, other):
+        return (other.commit_hash == self.commit_hash and
+                other._output_file_snapshot == self._output_file_snapshot and
+                other._dependency_snapshots == self._dependency_snapshots)
